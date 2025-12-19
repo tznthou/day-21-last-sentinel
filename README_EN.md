@@ -155,6 +155,22 @@ USER_AGENT=Mozilla/5.0 ...
 MAX_CONTENT_LENGTH=500000
 ```
 
+### ⚠️ Required Production Environment Variables
+
+When deploying to Zeabur, Vercel, Railway, etc., **you MUST set the following environment variables**, otherwise you'll get 500 errors:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `ALLOWED_ORIGINS` | **CORS whitelist** (Critical!) Must include your deployed domain | `https://your-app.zeabur.app` |
+| `SESSION_SECRET` | Session encryption key. Without it, sessions reset on restart | Generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
+| `INSFORGE_ANON_KEY` | InsForge anonymous key | Get from InsForge Dashboard |
+
+> **📌 Common Error**: Frontend keeps loading or shows 500 error after deployment
+>
+> **Cause**: Your deployed domain is not added to `ALLOWED_ORIGINS`, causing CORS to block all requests
+>
+> **Solution**: Set `ALLOWED_ORIGINS=https://your-domain.zeabur.app` in platform environment variables
+
 ---
 
 ## Usage Guide

@@ -155,6 +155,22 @@ USER_AGENT=Mozilla/5.0 ...
 MAX_CONTENT_LENGTH=500000
 ```
 
+### ⚠️ Production 部署必要設定
+
+部署到 Zeabur、Vercel、Railway 等平台時，**必須設定以下環境變數**，否則會出現 500 錯誤：
+
+| 環境變數 | 說明 | 範例 |
+|---------|------|------|
+| `ALLOWED_ORIGINS` | **CORS 白名單**（極重要！）必須填入你的部署網域 | `https://your-app.zeabur.app` |
+| `SESSION_SECRET` | Session 加密金鑰，未設定則每次重啟 session 失效 | 使用 `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` 產生 |
+| `INSFORGE_ANON_KEY` | InsForge 匿名金鑰 | 從 InsForge Dashboard 取得 |
+
+> **📌 常見錯誤**：部署後前端一直載入、顯示 500 錯誤
+>
+> **原因**：沒有把部署網域加入 `ALLOWED_ORIGINS`，導致 CORS 阻擋所有請求
+>
+> **解決**：在平台環境變數設定 `ALLOWED_ORIGINS=https://你的網域.zeabur.app`
+
 ---
 
 ## 使用教學
