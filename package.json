@@ -1,0 +1,46 @@
+{
+  "name": "last-sentinel",
+  "version": "1.0.0",
+  "description": "The Last Sentinel - Post-apocalyptic web monitoring terminal",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "node --watch server/index.js",
+    "start": "node server/index.js",
+    "build:css": "tailwindcss -i ./public/css/main.css -o ./public/css/output.css --watch"
+  },
+  "keywords": [
+    "monitoring",
+    "terminal",
+    "crt",
+    "retro",
+    "sse"
+  ],
+  "author": "tznthou",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tznthou/day-21-last-sentinel"
+  },
+  "bugs": {
+    "url": "https://github.com/tznthou/day-21-last-sentinel/issues"
+  },
+  "homepage": "https://github.com/tznthou/day-21-last-sentinel#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@insforge/sdk": "^1.0.0",
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.2.1",
+    "express-session": "^1.18.2",
+    "helmet": "^8.1.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

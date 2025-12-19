@@ -1,0 +1,88 @@
+/* Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Styles */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #33ff00 #0a0a0a;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #1a8000;
+    border-radius: 0;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #33ff00;
+  }
+
+  ::selection {
+    background: #33ff00;
+    color: #0a0a0a;
+  }
+
+  input::placeholder {
+    color: #1a8000;
+  }
+}
+
+/* Component Styles */
+@layer components {
+  .terminal-box {
+    @apply border border-terminal-green-dim bg-crt-dark/30;
+  }
+
+  .terminal-button {
+    @apply border border-terminal-green py-2 px-4 text-xs;
+    @apply hover:bg-terminal-green hover:text-crt-black;
+    @apply transition-colors duration-150;
+  }
+
+  .terminal-input {
+    @apply w-full bg-transparent border border-terminal-green-dim;
+    @apply px-2 py-1 text-xs;
+    @apply focus:border-terminal-green focus:outline-none;
+  }
+
+  .threat-low {
+    @apply text-threat-low border-threat-low;
+  }
+
+  .threat-medium {
+    @apply text-threat-medium border-threat-medium;
+  }
+
+  .threat-high {
+    @apply text-threat-high border-threat-high;
+  }
+
+  .threat-critical {
+    @apply text-threat-critical border-threat-critical animate-pulse;
+  }
+}
+
+/* Utility Styles */
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+  }
+
+  .text-glow-sm {
+    text-shadow: 0 0 5px currentColor;
+  }
+
+  .no-select {
+    user-select: none;
+  }
+}

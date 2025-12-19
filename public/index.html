@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE LAST SENTINEL</title>
+  <meta name="description" content="Post-apocalyptic web monitoring terminal">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/output.css">
+  <link rel="stylesheet" href="/css/crt.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👁️</text></svg>">
+</head>
+<body class="bg-crt-black text-terminal-green font-terminal overflow-hidden">
+
+  <!-- CRT Effect Layers -->
+  <div class="crt-overlay"></div>
+  <div class="crt-scanlines"></div>
+  <div class="crt-flicker"></div>
+
+  <!-- Main Container -->
+  <div id="app" class="relative z-10 h-screen flex flex-col">
+
+    <!-- Boot Screen -->
+    <div id="boot-screen" class="absolute inset-0 bg-crt-black z-50 flex items-center justify-center">
+      <div class="text-center">
+        <pre id="boot-logo" class="text-terminal-green text-xs sm:text-sm leading-tight mb-8"></pre>
+        <div id="boot-status" class="text-terminal-green-dim text-sm"></div>
+        <div id="boot-progress" class="mt-4 w-64 h-2 bg-crt-dark border border-terminal-green-dim mx-auto">
+          <div id="boot-bar" class="h-full bg-terminal-green transition-all duration-200" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth Screen (shown after boot) -->
+    <div id="auth-screen" class="absolute inset-0 bg-crt-black z-40 hidden items-center justify-center">
+      <div class="w-full max-w-md p-6">
+        <!-- ASCII Art Header -->
+        <pre class="text-terminal-green text-xs text-center mb-6 leading-tight">
+╔═══════════════════════════════════════╗
+║   SENTINEL IDENTITY VERIFICATION      ║
+║   ════════════════════════════════    ║
+║   Only authorized personnel may       ║
+║   access this terminal.               ║
+╚═══════════════════════════════════════╝
+        </pre>
+
+        <!-- Auth Form -->
+        <div id="auth-form-container" class="border border-terminal-green-dim p-4">
+          <div class="text-xs text-terminal-green-dim mb-4">
+            <span id="auth-mode-label">▸ 輸入哨兵代號與通行碼</span>
+          </div>
+
+          <form id="auth-form" class="space-y-4">
+            <div>
+              <label class="text-xs text-terminal-green-dim block mb-1">CALLSIGN (代號):</label>
+              <input type="text" id="auth-callsign"
+                placeholder="ALPHA_01"
+                autocomplete="username"
+                class="w-full bg-transparent border border-terminal-green-dim px-3 py-2 text-sm focus:border-terminal-green focus:outline-none uppercase">
+            </div>
+            <div>
+              <label class="text-xs text-terminal-green-dim block mb-1">PASSCODE (通行碼):</label>
+              <input type="password" id="auth-passcode"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                class="w-full bg-transparent border border-terminal-green-dim px-3 py-2 text-sm focus:border-terminal-green focus:outline-none">
+            </div>
+
+            <!-- Error Message -->
+            <div id="auth-error" class="text-threat-high text-xs hidden"></div>
+
+            <!-- Buttons -->
+            <div class="flex gap-2">
+              <button type="submit" id="btn-login"
+                class="flex-1 border border-terminal-green py-2 text-xs hover:bg-terminal-green hover:text-crt-black transition-colors">
+                [AUTHENTICATE]
+              </button>
+              <button type="button" id="btn-register"
+                class="flex-1 border border-terminal-green-dim py-2 text-xs text-terminal-green-dim hover:border-terminal-green hover:text-terminal-green transition-colors">
+                [NEW SENTINEL]
+              </button>
+            </div>
+          </form>
+
+          <!-- Register Form (hidden by default) -->
+          <form id="register-form" class="space-y-4 hidden">
+            <div>
+              <label class="text-xs text-terminal-green-dim block mb-1">CALLSIGN (代號):</label>
+              <input type="text" id="reg-callsign"
+                placeholder="3-20 字元，英數字和底線"
+                autocomplete="username"
+                class="w-full bg-transparent border border-terminal-green-dim px-3 py-2 text-sm focus:border-terminal-green focus:outline-none uppercase">
+            </div>
+            <div>
+              <label class="text-xs text-terminal-green-dim block mb-1">PASSCODE (通行碼):</label>
+              <input type="password" id="reg-passcode"
+                placeholder="至少 4 個字元"
+                autocomplete="new-password"
+                class="w-full bg-transparent border border-terminal-green-dim px-3 py-2 text-sm focus:border-terminal-green focus:outline-none">
+            </div>
+            <div>
+              <label class="text-xs text-terminal-green-dim block mb-1">CONFIRM PASSCODE:</label>
+              <input type="password" id="reg-passcode-confirm"
+                placeholder="再次輸入通行碼"
+                autocomplete="new-password"
+                class="w-full bg-transparent border border-terminal-green-dim px-3 py-2 text-sm focus:border-terminal-green focus:outline-none">
+            </div>
+
+            <!-- Error Message -->
+            <div id="reg-error" class="text-threat-high text-xs hidden"></div>
+
+            <!-- Buttons -->
+            <div class="flex gap-2">
+              <button type="submit" id="btn-do-register"
+                class="flex-1 border border-terminal-green py-2 text-xs hover:bg-terminal-green hover:text-crt-black transition-colors">
+                [CREATE IDENTITY]
+              </button>
+              <button type="button" id="btn-back-login"
+                class="flex-1 border border-terminal-green-dim py-2 text-xs text-terminal-green-dim hover:border-terminal-green hover:text-terminal-green transition-colors">
+                [BACK]
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Footer Message -->
+        <div class="text-center mt-4 text-xs text-terminal-green-dim italic">
+          「在廢土上，身份是最後的防線。」
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="border-b border-terminal-green-dim p-2 flex items-center justify-between flex-shrink-0">
+      <div class="flex items-center gap-4">
+        <pre class="text-xs leading-none hidden sm:block">
+ ████
+█    █
+ ████
+█    █
+ ████ </pre>
+        <div>
+          <h1 class="text-lg font-bold tracking-wider">THE LAST SENTINEL</h1>
+          <div class="text-terminal-green-dim text-xs">WASTELAND SIGNAL INTERCEPTOR v4.0.1</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 text-xs">
+        <button id="btn-help" class="hover:text-terminal-green-glow border border-terminal-green-dim px-2 py-0.5 hover:border-terminal-green">[?]</button>
+        <div id="system-time" class="text-terminal-green-dim"></div>
+        <div id="connection-status" class="flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-threat-medium animate-pulse"></span>
+          <span>STANDBY</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex overflow-hidden">
+
+      <!-- Left Panel: Console Output -->
+      <section class="flex-1 flex flex-col border-r border-terminal-green-dim">
+        <div class="p-2 border-b border-terminal-green-dim text-xs flex justify-between items-center">
+          <span>+--- SIGNAL FEED ---+</span>
+          <button id="btn-clear" class="hover:text-terminal-green-glow">[CLEAR]</button>
+        </div>
+        <div id="console-output" class="flex-1 overflow-y-auto p-2 font-mono text-xs leading-relaxed">
+          <!-- Console messages will appear here -->
+        </div>
+      </section>
+
+      <!-- Right Panel: Controls & Status -->
+      <aside class="w-64 flex flex-col bg-crt-dark/50">
+
+        <!-- Radar Display (縮小版) -->
+        <div class="p-2 border-b border-terminal-green-dim flex items-center gap-2">
+          <div id="radar" class="w-12 h-12 rounded-full border border-terminal-green-dim relative overflow-hidden flex-shrink-0">
+            <div class="radar-sweep"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-1.5 h-1.5 rounded-full bg-terminal-green animate-pulse"></div>
+            </div>
+          </div>
+          <div class="text-xs">
+            <div class="text-terminal-green-dim">STATUS</div>
+            <div id="radar-status" class="text-threat-low">SCANNING</div>
+          </div>
+        </div>
+
+        <!-- Target Setup -->
+        <div class="p-3 border-b border-terminal-green-dim flex-1 overflow-y-auto">
+          <div class="text-xs mb-2">+--- FREQUENCY TUNING ---+</div>
+
+          <form id="target-form" class="space-y-3">
+            <div>
+              <label class="text-xs text-terminal-green-dim block mb-1">TARGET URL:</label>
+              <input type="url" id="input-url" placeholder="https://..."
+                class="w-full bg-transparent border border-terminal-green-dim px-2 py-1 text-xs focus:border-terminal-green focus:outline-none">
+            </div>
+            <div>
+              <label class="text-xs text-terminal-green-dim block mb-1">KEYWORDS (comma separated):</label>
+              <input type="text" id="input-keywords" placeholder="AI, 末日, 生存者"
+                class="w-full bg-transparent border border-terminal-green-dim px-2 py-1 text-xs focus:border-terminal-green focus:outline-none">
+            </div>
+            <div>
+              <label class="text-xs text-terminal-green-dim block mb-1">FREQUENCY NAME:</label>
+              <input type="text" id="input-name" placeholder="HackerNews Feed"
+                class="w-full bg-transparent border border-terminal-green-dim px-2 py-1 text-xs focus:border-terminal-green focus:outline-none">
+            </div>
+            <button type="submit" class="w-full border border-terminal-green py-2 text-xs hover:bg-terminal-green hover:text-crt-black transition-colors">
+              [ADD FREQUENCY]
+            </button>
+          </form>
+
+          <!-- Active Targets List -->
+          <div class="mt-4">
+            <div class="text-xs text-terminal-green-dim mb-2">ACTIVE FREQUENCIES:</div>
+            <div id="targets-list" class="space-y-1 text-xs">
+              <!-- Targets will be listed here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="p-2 space-y-1">
+          <button id="btn-start" class="w-full border border-terminal-green py-1.5 text-xs hover:bg-terminal-green hover:text-crt-black transition-colors">
+            [INITIATE WATCH]
+          </button>
+          <button id="btn-scan" class="w-full border border-terminal-green-dim py-1.5 text-xs text-terminal-green-dim hover:border-terminal-green hover:text-terminal-green transition-colors">
+            [FORCE SCAN]
+          </button>
+        </div>
+
+      </aside>
+    </main>
+
+    <!-- Footer Status Bar -->
+    <footer class="border-t border-terminal-green-dim p-2 flex justify-between text-xs flex-shrink-0">
+      <div class="flex gap-4">
+        <span>SYS: <span id="sys-status" class="text-terminal-green">OK</span></span>
+        <span>MEM: <span id="mem-usage">--</span></span>
+        <span>UPTIME: <span id="uptime">00:00:00</span></span>
+      </div>
+      <div class="flex gap-4">
+        <span>SIGNALS: <span id="signal-count">0</span></span>
+        <span>TARGETS: <span id="target-count">0</span></span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Signal Alert Modal -->
+  <div id="signal-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
+    <div class="bg-crt-black border-2 border-threat-high max-w-2xl w-full max-h-[80vh] overflow-hidden">
+      <div class="bg-threat-high text-crt-black p-2 text-center font-bold animate-pulse">
+        !!! SIGNAL INTERCEPTED !!!
+      </div>
+      <div id="signal-content" class="p-4 overflow-y-auto max-h-[60vh] text-sm">
+        <!-- Signal details will appear here -->
+      </div>
+      <div class="p-2 border-t border-terminal-green-dim">
+        <button id="btn-close-modal" class="w-full border border-terminal-green py-2 text-xs hover:bg-terminal-green hover:text-crt-black transition-colors">
+          [ACKNOWLEDGE]
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div id="help-modal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center p-4">
+    <div class="bg-crt-black border border-terminal-green max-w-lg w-full max-h-[90vh] overflow-hidden">
+      <div class="bg-terminal-green text-crt-black p-2 text-center font-bold">
+        ◈ 哨兵紀錄 #247 ◈
+      </div>
+      <div class="p-4 overflow-y-auto max-h-[70vh] text-xs space-y-4">
+
+        <div class="text-terminal-green-dim leading-relaxed italic border-l-2 border-terminal-green pl-3">
+          「災變後的第 247 天。網路訊號時有時無，但我必須知道——<br>
+          在這片廢土之外，是否還有人活著？」
+        </div>
+
+        <div>
+          <div class="text-terminal-green font-bold mb-1">▸ 你的任務</div>
+          <p class="text-terminal-green-dim leading-relaxed">
+            掃描殘存的網路節點，搜尋任何生還者的訊息。
+            設定你關心的<span class="text-terminal-green">頻率</span>與<span class="text-terminal-green">關鍵字</span>，
+            當訊號出現時，AI 會協助判讀威脅等級。
+          </p>
+        </div>
+
+        <div>
+          <div class="text-terminal-green font-bold mb-1">▸ 操作流程</div>
+          <ol class="text-terminal-green-dim space-y-1 list-decimal list-inside leading-relaxed">
+            <li>輸入要監聽的<span class="text-terminal-green">網址</span>（殘存的網站、論壇）</li>
+            <li>設定<span class="text-terminal-green">關鍵字</span>（生存者、救援、物資...）</li>
+            <li>為這個頻率命名（選填）</li>
+            <li><span class="text-terminal-green">[ADD FREQUENCY]</span> 鎖定頻率</li>
+            <li><span class="text-terminal-green">[INITIATE WATCH]</span> 開始監聽</li>
+          </ol>
+        </div>
+
+        <div>
+          <div class="text-terminal-green font-bold mb-1">▸ 控制台指令</div>
+          <ul class="text-terminal-green-dim space-y-1 leading-relaxed">
+            <li><span class="text-terminal-green">[INITIATE WATCH]</span> — 啟動/暫停監聽模式</li>
+            <li><span class="text-terminal-green">[FORCE SCAN]</span> — 立即掃描所有頻率</li>
+            <li><span class="text-terminal-green">[CLEAR]</span> — 清除訊號紀錄</li>
+            <li><span class="text-terminal-green">[X]</span> — 放棄該頻率</li>
+          </ul>
+        </div>
+
+        <div class="border border-threat-medium/50 bg-threat-medium/5 p-2 text-threat-medium">
+          <div class="font-bold mb-1">⚠ 生存守則</div>
+          <p class="text-xs leading-relaxed opacity-90">
+            資源有限，避免長時間監控以免暴露位置。<br>
+            謹記：<span class="text-threat-high">非人類之物</span>可能正在模仿人類訊號。<br>
+            若發現異常，立即中止監聽並切換頻率。
+          </p>
+        </div>
+
+        <div class="text-[10px] mt-3 text-center" style="color: #1a3a1a;">
+          💿 建議搭配末世風格環境音樂，沉浸感更佳
+        </div>
+
+        <div class="text-center pt-3 border-t border-terminal-green-dim space-y-2">
+          <div class="text-terminal-green-dim italic">
+            「也許我是最後一個人，也許不是。<br>
+            但只要還有訊號，我就會繼續守望。」
+          </div>
+          <div class="text-terminal-green text-[10px]">— THE LAST SENTINEL —</div>
+        </div>
+
+      </div>
+      <div class="p-2 border-t border-terminal-green-dim">
+        <button id="btn-close-help" class="w-full border border-terminal-green py-2 text-xs hover:bg-terminal-green hover:text-crt-black transition-colors">
+          [UNDERSTOOD]
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

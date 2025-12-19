@@ -1,0 +1,361 @@
+/**
+ * CRT Effect Styles
+ * Simulates vintage CRT monitor appearance
+ */
+
+/* =========================================
+   CRT Overlay - Screen curvature & vignette
+   ========================================= */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+
+  /* Vignette effect */
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.3) 80%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+
+  /* Subtle screen curvature illusion */
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================
+   Scanlines
+   ========================================= */
+.crt-scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 101;
+
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    rgba(0, 0, 0, 0.15) 1px,
+    rgba(0, 0, 0, 0.15) 2px
+  );
+
+  /* Optional: Moving scanline */
+  /* animation: scanline-move 8s linear infinite; */
+}
+
+.crt-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(51, 255, 0, 0.03) 50%,
+    transparent 100%
+  );
+  height: 100px;
+  animation: scanline-sweep 4s linear infinite;
+}
+
+@keyframes scanline-sweep {
+  0% {
+    transform: translateY(-100px);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* =========================================
+   Screen Flicker
+   ========================================= */
+.crt-flicker {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 102;
+  opacity: 0;
+  background: rgba(51, 255, 0, 0.02);
+  animation: crt-flicker 0.15s infinite;
+}
+
+@keyframes crt-flicker {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   Chromatic Aberration (Color Shift)
+   ========================================= */
+.chromatic-text {
+  text-shadow:
+    -1px 0 rgba(255, 0, 0, 0.3),
+    1px 0 rgba(0, 255, 255, 0.3);
+}
+
+/* =========================================
+   Screen Jitter
+   ========================================= */
+@keyframes screen-jitter {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-1px, 0);
+  }
+  20% {
+    transform: translate(1px, 1px);
+  }
+  30% {
+    transform: translate(0, -1px);
+  }
+  40% {
+    transform: translate(1px, 0);
+  }
+  50% {
+    transform: translate(-1px, 1px);
+  }
+  60% {
+    transform: translate(0, 0);
+  }
+}
+
+.jitter {
+  animation: screen-jitter 0.5s steps(1) infinite;
+}
+
+/* Occasional glitch */
+@keyframes glitch {
+  0%, 95%, 100% {
+    transform: translate(0);
+    filter: none;
+  }
+  96% {
+    transform: translate(-2px, 1px);
+    filter: hue-rotate(90deg);
+  }
+  97% {
+    transform: translate(2px, -1px);
+    filter: hue-rotate(-90deg);
+  }
+  98% {
+    transform: translate(-1px, 2px);
+    filter: saturate(2);
+  }
+  99% {
+    transform: translate(1px, -2px);
+    filter: saturate(0.5);
+  }
+}
+
+.glitch-occasional {
+  animation: glitch 10s linear infinite;
+}
+
+/* =========================================
+   Radar Sweep Animation
+   ========================================= */
+.radar-sweep {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(51, 255, 0, 0.3) 30deg,
+    transparent 60deg
+  );
+  animation: radar-rotate 3s linear infinite;
+}
+
+@keyframes radar-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Radar grid */
+#radar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 30%, rgba(51, 255, 0, 0.1) 31%, transparent 32%),
+    radial-gradient(circle, transparent 60%, rgba(51, 255, 0, 0.1) 61%, transparent 62%),
+    radial-gradient(circle, transparent 90%, rgba(51, 255, 0, 0.1) 91%, transparent 92%);
+}
+
+#radar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, transparent 49%, rgba(51, 255, 0, 0.2) 49%, rgba(51, 255, 0, 0.2) 51%, transparent 51%),
+    linear-gradient(90deg, transparent 49%, rgba(51, 255, 0, 0.2) 49%, rgba(51, 255, 0, 0.2) 51%, transparent 51%);
+}
+
+/* =========================================
+   Glow Effects
+   ========================================= */
+.glow-text {
+  text-shadow:
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 20px currentColor;
+}
+
+.glow-border {
+  box-shadow:
+    0 0 5px rgba(51, 255, 0, 0.5),
+    inset 0 0 5px rgba(51, 255, 0, 0.1);
+}
+
+/* =========================================
+   Terminal Cursor
+   ========================================= */
+.cursor-blink::after {
+  content: '█';
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* =========================================
+   Alert Flash
+   ========================================= */
+@keyframes alert-flash {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(255, 0, 51, 0.1);
+  }
+}
+
+.alert-flash {
+  animation: alert-flash 0.5s ease-in-out 3;
+}
+
+/* Signal intercept - 柔和邊框發光效果 */
+@keyframes intercept-glow {
+  0%, 100% {
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+  15%, 45%, 75% {
+    box-shadow:
+      inset 0 0 30px rgba(255, 51, 51, 0.3),
+      inset 0 0 60px rgba(255, 51, 51, 0.1);
+  }
+  30%, 60%, 90% {
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+}
+
+@keyframes intercept-border {
+  0%, 100% {
+    border-color: transparent;
+  }
+  15%, 45%, 75% {
+    border-color: rgba(255, 51, 51, 0.8);
+  }
+  30%, 60%, 90% {
+    border-color: transparent;
+  }
+}
+
+.intercept-flash {
+  animation: intercept-glow 0.8s ease-in-out;
+  border: 3px solid transparent;
+  animation:
+    intercept-glow 0.8s ease-in-out,
+    intercept-border 0.8s ease-in-out;
+}
+
+/* 額外的警告指示器 - 用於更明顯但不刺眼的提示 */
+.intercept-flash::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ff3333, transparent);
+  animation: intercept-bar 0.8s ease-in-out;
+  z-index: 9999;
+}
+
+@keyframes intercept-bar {
+  0%, 100% {
+    opacity: 0;
+  }
+  15%, 45%, 75% {
+    opacity: 1;
+  }
+  30%, 60%, 90% {
+    opacity: 0;
+  }
+}
+
+/* =========================================
+   Boot Sequence
+   ========================================= */
+@keyframes boot-flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  10%, 30%, 50%, 70%, 90% {
+    opacity: 0.8;
+  }
+  20%, 40%, 60%, 80% {
+    opacity: 0.95;
+  }
+}
+
+.boot-flicker {
+  animation: boot-flicker 2s ease-in-out;
+}
+
+/* =========================================
+   Damage Texture Overlay
+   ========================================= */
+.damage-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 103;
+  background-image: url('/assets/textures/damage.svg');
+  background-size: cover;
+  opacity: 0.1;
+  mix-blend-mode: screen;
+}
+
+/* =========================================
+   Low Performance Mode
+   ========================================= */
+.low-performance .crt-scanlines,
+.low-performance .crt-flicker,
+.low-performance .radar-sweep {
+  display: none;
+}
+
+.low-performance .crt-overlay {
+  background: none;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.3);
+}
