@@ -111,11 +111,55 @@ const elements = {
   targetCount: document.getElementById('target-count'),
   uptime: document.getElementById('uptime'),
   memUsage: document.getElementById('mem-usage'),
-  radarStatus: document.getElementById('radar-status')
+  radarStatus: document.getElementById('radar-status'),
+  // Landing Page elements
+  landingScreen: document.getElementById('landing-screen'),
+  btnEnterSystem: document.getElementById('btn-enter-system'),
+  btnViewHelp: document.getElementById('btn-view-help')
 };
 
 // Terminal instance
 const terminal = new Terminal(elements.consoleOutput);
+
+// ============================================
+// Landing Page Functions
+// ============================================
+
+/**
+ * Show landing page for new visitors
+ */
+function showLandingPage() {
+  elements.landingScreen.classList.remove('hidden');
+  elements.landingScreen.classList.add('flex');
+
+  // 綁定進入按鈕
+  elements.btnEnterSystem.addEventListener('click', handleEnterSystem, { once: true });
+
+  // 綁定說明按鈕
+  elements.btnViewHelp.addEventListener('click', openHelpModal);
+}
+
+/**
+ * Handle enter system button click - transition to auth screen
+ */
+function handleEnterSystem() {
+  // 淡出 Landing Page
+  elements.landingScreen.style.transition = 'opacity 0.5s';
+  elements.landingScreen.style.opacity = '0';
+
+  setTimeout(() => {
+    elements.landingScreen.classList.add('hidden');
+    elements.landingScreen.classList.remove('flex');
+    elements.landingScreen.style.opacity = '1'; // 重置
+
+    // 顯示 Auth Screen (調用現有函數)
+    showAuthScreen();
+  }, 500);
+}
+
+// ============================================
+// Application Initialization
+// ============================================
 
 /**
  * Initialize the application
@@ -137,8 +181,8 @@ async function init() {
     // Already logged in, proceed to main app
     onAuthSuccess(sentinel);
   } else {
-    // Show auth screen
-    showAuthScreen();
+    // Show landing page for new visitors
+    showLandingPage();
   }
 }
 

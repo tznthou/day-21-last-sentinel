@@ -39,6 +39,60 @@
       </div>
     </div>
 
+    <!-- Landing Page - 介紹畫面 (z-45 介於 boot 和 auth 之間) -->
+    <div id="landing-screen" class="absolute inset-0 bg-crt-black hidden items-center justify-center" style="z-index: 45;">
+      <div class="w-full max-w-2xl p-6">
+
+        <!-- ASCII 標題 -->
+        <pre class="text-terminal-green text-xs sm:text-sm text-center mb-8 leading-tight glow-text">
+████████╗██╗  ██╗███████╗
+╚══██╔══╝██║  ██║██╔════╝
+   ██║   ███████║█████╗
+   ██║   ██╔══██║██╔══╝
+   ██║   ██║  ██║███████╗
+   ╚═╝   ╚═╝  ╚═╝╚══════╝
+    LAST SENTINEL
+        </pre>
+
+        <!-- 終端機預覽框 -->
+        <div class="terminal-box p-4 mb-6 max-h-48 overflow-hidden">
+          <div class="text-xs text-terminal-green-dim mb-2">┌─── SIGNAL PREVIEW ───┐</div>
+          <div class="text-xs font-mono space-y-1">
+            <div class="text-terminal-green">[SYSTEM] Initializing signal interceptor...</div>
+            <div class="text-terminal-green-dim">[SCAN] Searching mesh network nodes...</div>
+            <div class="text-threat-medium">[ALERT] Unknown frequency detected: 147.3 MHz</div>
+            <div class="text-terminal-green">[INFO] AI analyzer standing by...</div>
+          </div>
+        </div>
+
+        <!-- 簡介文字 -->
+        <div class="text-center mb-8 space-y-3">
+          <p class="text-terminal-green text-sm">末日後的世界，訊號是最後的希望。</p>
+          <p class="text-terminal-green-dim text-xs leading-relaxed">
+            THE LAST SENTINEL 是一個網路監聽終端，<br>
+            讓你監控指定網站的變化，搜尋關鍵訊息。<br>
+            AI 會協助分析訊號的威脅等級。
+          </p>
+        </div>
+
+        <!-- 按鈕區 -->
+        <div class="flex justify-center gap-4">
+          <button id="btn-enter-system" class="terminal-button px-6 py-3 glow-border">
+            [ 進入系統 ]
+          </button>
+          <button id="btn-view-help" class="terminal-button px-6 py-3 opacity-70 hover:opacity-100">
+            [ 使用說明 ]
+          </button>
+        </div>
+
+        <!-- 底部裝飾 -->
+        <div class="text-center mt-8 text-xs text-terminal-green-dim animate-pulse">
+          ▼ WASTELAND SIGNAL INTERCEPTOR v4.0.1 ▼
+        </div>
+
+      </div>
+    </div>
+
     <!-- Auth Screen (shown after boot) -->
     <div id="auth-screen" class="absolute inset-0 bg-crt-black z-40 hidden items-center justify-center">
       <div class="w-full max-w-md p-6">
