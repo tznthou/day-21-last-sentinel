@@ -86,6 +86,8 @@ THREAT LEVEL: MEDIUM
 | Server-Sent Events | Real-time Push | Unidirectional Stream |
 | Tailwind CSS 3.4 | Styling | Custom CRT Theme |
 | Cheerio | HTML Parsing | Web Scraping |
+| Swagger UI | API Docs | Interactive Documentation |
+| Node.js Test | Unit Tests | Built-in Test Runner |
 
 ---
 
@@ -152,9 +154,21 @@ npm run build:css
 
 # Start development server
 npm run dev
+
+# Run unit tests
+npm test
 ```
 
 Open browser at `http://localhost:3000`
+
+### API Documentation
+
+After starting the server, visit `/api-docs` to view interactive API documentation (Swagger UI).
+
+- **Development**: `http://localhost:3000/api-docs`
+- **Production**: `https://your-domain.com/api-docs`
+
+The API docs include descriptions of all endpoints, request/response formats, and allow you to test APIs directly in the browser.
 
 ### Environment Variables
 
@@ -256,13 +270,18 @@ This disables scanlines, flicker, and radar animations.
 day-21-last-sentinel/
 ├── server/
 │   ├── index.js              # Express main app
+│   ├── swagger.js            # Swagger configuration
+│   ├── swagger-docs.js       # API documentation
 │   ├── lib/
 │   │   ├── insforge.js       # InsForge SDK wrapper
 │   │   ├── scraper.js        # Web scraper
 │   │   └── signal.js         # Signal management
 │   └── routes/
+│       ├── auth.js           # Authentication routes
 │       ├── stream.js         # SSE streaming routes
 │       └── targets.js        # Frequency management API
+├── tests/
+│   └── scraper.test.js       # Unit tests
 ├── public/
 │   ├── index.html            # Main page
 │   ├── css/
@@ -368,6 +387,13 @@ This project has undergone a comprehensive security audit, with fixes applied fr
 | L06 | Incomplete package.json | Added repository, bugs, homepage |
 | L08 | Environment variables not validated | Startup check for required variables |
 
+### ✅ Completed Quality Improvements
+
+| Code | Item | Completed |
+|------|------|-----------|
+| L03 | Unit Tests (39 test cases) | 2025-12-20 |
+| L07 | API Documentation (Swagger UI) | 2025-12-20 |
+
 ### 📋 Pending Items (Technical Debt)
 
 The following items are non-security code quality improvements, optional based on needs:
@@ -377,9 +403,7 @@ The following items are non-security code quality improvements, optional based o
 | M07 | Structured Logging (winston) | Optional |
 | M08 | Frontend state management refactor | Optional |
 | L02 | TypeScript migration | Optional |
-| L03 | Unit tests | Recommended |
 | L05 | Dockerization | Optional |
-| L07 | API documentation (Swagger) | Optional |
 
 ### 🔒 Security Recommendations
 
