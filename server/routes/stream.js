@@ -9,7 +9,7 @@ import { generateNoise } from '../lib/scraper.js';
 
 export const router = Router();
 
-// TODO: Add proper authentication middleware
+// Fallback user ID for unauthenticated requests (demo mode)
 const DEMO_USER_ID = '00000000-0000-0000-0000-000000000001';
 
 // Store active SSE connections
