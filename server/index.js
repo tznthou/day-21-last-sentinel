@@ -19,6 +19,9 @@ import { router as targetsRouter } from './routes/targets.js';
 import { router as streamRouter } from './routes/stream.js';
 import { router as authRouter, requireAuth } from './routes/auth.js';
 
+// Swagger API Documentation
+import { setupSwagger } from './swagger.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -187,6 +190,9 @@ app.use('/api/targets', requireAuth, targetsRouter);
 
 app.post('/api/stream/scan', scanLimiter); // Rate limit manual scans
 app.use('/api/stream', streamRouter); // SSE needs custom auth handling
+
+// Swagger API Documentation (available at /api-docs)
+setupSwagger(app);
 
 // Health check
 app.get('/api/health', (req, res) => {
