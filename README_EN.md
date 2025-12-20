@@ -16,6 +16,7 @@ In the wasteland after the apocalypse, you are the last watchman. Monitor the re
 
 ## Features
 
+- **Landing Page Onboarding**: First-time visitors see product introduction before deciding to register
 - **Multi-Frequency Monitoring**: Watch multiple websites simultaneously, detect content changes in real-time
 - **Keyword Interception**: Set custom keywords, trigger alerts when they appear on target sites
 - **AI Threat Analysis**: InsForge AI automatically assesses signal threat levels and categories
@@ -26,6 +27,22 @@ In the wasteland after the apocalypse, you are the last watchman. Monitor the re
 ---
 
 ## Screenshots
+
+### Landing Page
+
+```
+████████╗██╗  ██╗███████╗
+╚══██╔══╝██║  ██║██╔════╝
+   ██║   ███████║█████╗
+   ██║   ██╔══██║██╔══╝
+   ██║   ██║  ██║███████╗
+   ╚═╝   ╚═╝  ╚═╝╚══════╝
+    LAST SENTINEL
+
+In the wasteland, signals are the last hope.
+
+[ ENTER SYSTEM ]    [ VIEW HELP ]
+```
 
 ### Main Console
 
@@ -174,6 +191,13 @@ When deploying to Zeabur, Vercel, Railway, etc., **you MUST set the following en
 ---
 
 ## Usage Guide
+
+### 0. First Visit
+
+1. Opening the site shows the Landing Page introduction
+2. Click `[ ENTER SYSTEM ]` to proceed to login/register screen
+3. Click `[ VIEW HELP ]` to view the operation guide
+4. Logged-in users automatically skip the Landing Page to main console
 
 ### 1. Add Monitoring Frequency
 
