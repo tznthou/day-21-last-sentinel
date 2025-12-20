@@ -137,6 +137,12 @@ function showLandingPage() {
 
   // 綁定說明按鈕
   elements.btnViewHelp.addEventListener('click', openHelpModal);
+
+  // 綁定 Help Modal 關閉事件（因為 setupEventListeners 在登入後才執行）
+  elements.btnCloseHelp.addEventListener('click', closeHelpModal);
+  elements.helpModal.addEventListener('click', (e) => {
+    if (e.target === elements.helpModal) closeHelpModal();
+  });
 }
 
 /**
